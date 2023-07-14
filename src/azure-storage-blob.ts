@@ -1,7 +1,6 @@
 // ./src/azure-storage-blob.ts
 
 // <snippet_package>
-// THIS IS SAMPLE CODE ONLY - NOT MEANT FOR PRODUCTION USE
 import { BlobServiceClient, ContainerClient } from "@azure/storage-blob";
 
 const containerName = `uploaded`;
@@ -19,22 +18,18 @@ const blobService = new BlobServiceClient(uploadUrl);
 // get Container - full public read access
 const containerClient: ContainerClient =
   blobService.getContainerClient(containerName);
-// </snippet_get_client>
 
-// <snippet_isStorageConfigured>
-// Feature flag - disable storage feature to app if not configured
+
+// 機能フラグ - 設定されていない場合は、アプリにストレージ機能を無効にします
 export const isStorageConfigured = () => {
   return !storageAccountName || !sasToken ? false : true;
 };
-// </snippet_isStorageConfigured>
 
-// <snippet_getBlobsInContainer>
-// return list of blobs in container to display
+// 表示するコンテナのblobのリストを返す。
 export const getBlobsInContainer = async () => {
   const returnedBlobUrls = [];
 
-  // get list of blobs in container
-  // eslint-disable-next-line
+  // コンテナ内のblobのリストを取得する。
   for await (const blob of containerClient.listBlobsFlat()) {
     console.log(`${blob.name}`);
 
@@ -43,34 +38,28 @@ export const getBlobsInContainer = async () => {
       name: blob.name
     }
 
-    // if image is public, just construct URL
+    // イメージが公開されている場合は、URLを構築するだけ
     returnedBlobUrls.push(blobItem);
   }
 
   return returnedBlobUrls;
 };
-// </snippet_getBlobsInContainer>
 
-// <snippet_createBlobInContainer>
 const createBlobInContainer = async (file: File) => {
-  // create blobClient for container
+  // blobコンテナ用のblobClientを作成
+  // パラメータとして、blobclientの名前を指定
   const blobClient = containerClient.getBlockBlobClient(file.name);
-
-  // set mimetype as determined from browser with file upload control
+  // ファイルアップロードコントロールでブラウザーから決定されたtypeを設定
   const options = { blobHTTPHeaders: { blobContentType: file.type } };
 
-  // upload file
+  // ファイルをアップロードする
   await blobClient.uploadData(file, options);
 };
-// </snippet_createBlobInContainer>
 
-// <snippet_uploadFileToBlob>
 const uploadFileToBlob = async (file: File | null): Promise<void> => {
   if (!file) return;
-
-  // upload file
+  // ファイルをアップロードする
   await createBlobInContainer(file);
 };
-// </snippet_uploadFileToBlob>
 
 export default uploadFileToBlob;

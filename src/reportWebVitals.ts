@@ -1,5 +1,8 @@
 import { ReportHandler } from 'web-vitals';
 
+// Webページのユーザーエクスペリエンスを測定するための関数らしい
+// 使い方はわからん
+
 const reportWebVitals = (onPerfEntry?: ReportHandler) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
     import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {

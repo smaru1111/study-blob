@@ -21,8 +21,14 @@ const App = (): JSX.Element => {
   useEffect(() => {
     getBlobsInContainer().then((list:any) =>{
       // prepare UI for results
+      // listの中身を出力、objectの中身を出力
+      console.log("%o", list);
       setBlobList(list);
     })
+  }, [fileUploaded]);
+
+  useEffect(() => {
+    console.log("File Uploaded is ", fileUploaded);
   }, [fileUploaded]);
 
   const onFileChange = (event: any) => {
@@ -51,12 +57,14 @@ const App = (): JSX.Element => {
 
   // display form
   const DisplayForm = () => (
-    <div>
-      <input type="file" onChange={onFileChange} key={inputKey || ''} />
-      <button type="submit" onClick={onFileUpload}>
-        Upload!
-          </button>
-    </div>
+    <>
+      <div>
+        <input type="file" onChange={onFileChange} key={inputKey || ''} />
+        <button type="submit" onClick={onFileUpload}>
+          Upload!
+        </button>
+      </div>
+    </>
   )
 
   return (
